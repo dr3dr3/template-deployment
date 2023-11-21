@@ -1,4 +1,4 @@
-name: DEPLOYMENT
+name: ON-REPO-DISPATCH
 run-name: Continuous Deployment ( ${{ github.event_name }} run by ${{ github.actor }} )
 
 on:
