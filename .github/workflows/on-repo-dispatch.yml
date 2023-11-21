@@ -1,0 +1,40 @@
+name: DEPLOYMENT
+run-name: Continuous Deployment ( ${{ github.event_name }} run by ${{ github.actor }} )
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [deploy]
+
+jobs: 
+
+  continuous-deployment:
+    name: CD
+    concurrency:
+      group: '${{ github.workflow }}-${{ github.repository }}'
+      cancel-in-progress: true  
+    uses: dr3dr3/template-pipeline/.github/workflows/continuous-deployment.yml@main
+    with:  
+      target-deploy: ${{ vars.ENVIRONMENT }}
+      blue-green: 'blue'
+      site-url: ${{ vars.SITE_URL }}
+      repo-gitops: ${{ vars.REPO_GITOPS }}
+      deploy-to: ${{ vars.DEPLOY_BLUE }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    secrets: inherit
+
+  # Dispatch to deploy to Production (Blue) environment
+  dispatch:
+    name: Dispatch Blue
+    needs: [continuous-deployment]
+    if: ${{ contains(github.repository,'stg') && vars.REPO_PROD != '' }}
+    uses: dr3dr3/temp-pipeline/.github/workflows/deployment-dispatch.yml@main
+    with:
+      blue-green: 'blue'
+      target-repo: ${{ vars.REPO_PROD }}
+    secrets: inherit
+
+  ### Add dispatch to Prod (Green)... when needed (how know?)
