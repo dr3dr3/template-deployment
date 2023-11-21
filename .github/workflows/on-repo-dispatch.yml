@@ -19,6 +19,7 @@ jobs:
       blue-green: 'blue'
       site-url: ${{ vars.SITE_URL }}
       repo-gitops: ${{ vars.REPO_GITOPS }}
+      check-links: ${{ vars.CHECK_LINKS }}
       deploy-to: ${{ vars.DEPLOY_BLUE }}
     permissions:
       contents: read
