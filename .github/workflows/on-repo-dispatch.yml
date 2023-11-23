@@ -36,4 +36,6 @@ jobs:
     with:
       blue-green: 'blue'
       target-repo: ${{ vars.REPO_PROD }}
+    permissions:
+      contents: write
     secrets: inherit
