@@ -32,7 +32,7 @@ jobs:
     name: Dispatch Blue
     needs: [continuous-deployment]
     if: ${{ contains(github.repository,'stg') && vars.REPO_PROD != 'NA' }}
-    uses: dr3dr3/temp-pipeline/.github/workflows/deployment-dispatch.yml@main
+    uses: dr3dr3/template-pipeline/.github/workflows/deployment-dispatch.yml@main
     with:
       blue-green: 'blue'
       target-repo: ${{ vars.REPO_PROD }}
