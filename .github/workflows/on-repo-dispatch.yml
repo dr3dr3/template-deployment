@@ -2,7 +2,23 @@ name: ON-REPO-DISPATCH
 run-name: Continuous Deployment ( ${{ github.event_name }} run by ${{ github.actor }} )
 
 on:
+
   workflow_dispatch:
+    inputs:
+      soln-group:
+        description: 'Solution Group'
+        required: true
+        default: 'devops-demo'
+        type: string
+      blue-green:
+        description: 'Blue or Green Deployment'
+        required: true
+        default: 'blue'
+        type: choice
+        options:
+          - blue
+          - green
+
   repository_dispatch:
     types: [deploy]
 
@@ -16,7 +32,8 @@ jobs:
     uses: dr3dr3/template-pipeline/.github/workflows/continuous-deployment.yml@main
     with:  
       target-deploy: ${{ vars.ENVIRONMENT }}
-      blue-green: 'blue'
+      soln-group: ${{ github.event.client_payload.soln-group }}
+      blue-green: ${{ github.event.client_payload.blue-green }}
       site-url: ${{ vars.SITE_URL }}
       repo-gitops: ${{ vars.REPO_GITOPS }}
       check-links: ${{ vars.CHECK_LINKS }}
