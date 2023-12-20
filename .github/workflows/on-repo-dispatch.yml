@@ -7,12 +7,12 @@ on:
     inputs:
       soln-group:
         description: 'Solution Group'
-        required: true
+        required: false
         default: 'devops-demo'
         type: string
       blue-green:
         description: 'Blue or Green Deployment'
-        required: true
+        required: false
         default: 'blue'
         type: choice
         options:
@@ -32,8 +32,8 @@ jobs:
     uses: dr3dr3/template-pipeline/.github/workflows/continuous-deployment.yml@main
     with:  
       target-deploy: ${{ vars.ENVIRONMENT }}
-      soln-group: ${{ github.event.client_payload.soln-group }}
-      blue-green: ${{ github.event.client_payload.blue-green }}
+      soln-group: ${{ github.event.client_payload.soln-group || inputs.soln-group }}
+      blue-green: ${{ github.event.client_payload.blue-green || inputs.blue-green }}
       site-url: ${{ vars.SITE_URL }}
       repo-gitops: ${{ vars.REPO_GITOPS }}
       check-links: ${{ vars.CHECK_LINKS }}
@@ -51,6 +51,7 @@ jobs:
     if: ${{ contains(github.repository,'stg') && vars.REPO_PROD != 'NA' }}
     uses: dr3dr3/template-pipeline/.github/workflows/deployment-dispatch.yml@main
     with:
+      soln-group: ${{ github.event.client_payload.soln-group || inputs.soln-group }}
       blue-green: 'blue'
       target-repo: ${{ vars.REPO_PROD }}
     permissions:
