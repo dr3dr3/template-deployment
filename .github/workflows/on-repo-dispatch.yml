@@ -29,7 +29,7 @@ jobs:
     concurrency:
       group: '${{ github.workflow }}-${{ github.repository }}'
       cancel-in-progress: true  
-    uses: dr3dr3/template-pipeline/.github/workflows/continuous-deployment.yml@main
+    uses: dr3dr3/core-pipeline/.github/workflows/continuous-deployment.yml@main
     with:  
       target-deploy: ${{ vars.ENVIRONMENT }}
       soln-group: ${{ github.event.client_payload.soln-group || inputs.soln-group }}
